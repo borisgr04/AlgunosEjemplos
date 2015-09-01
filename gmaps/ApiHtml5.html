@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script >
+            localizame();
+            function localizame() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(coordenadas, errores);
+                } else {
+                    alert('Oops! Tu navegador no soporta geolocalización. Bájate Chrome, que es gratis!');
+                }
+            }
+            function errores(err) {
+                if (err.code == 0) {
+                    alert("Oops! Algo ha salido mal");
+                }
+                if (err.code == 1) {
+                    alert("Oops! No has aceptado compartir tu posición");
+                }
+                if (err.code == 2) {
+                    alert("Oops! No se puede obtener la posición actual");
+                }
+                if (err.code == 3) {
+                    alert("Oops! Hemos superado el tiempo de espera");
+                }
+            }
+            function coordenadas() {
+                var latitud = position.coords.latitude;
+                var longitud = position.coords.longitude;
+                //alert(latitud+":"+longitud);
+            }
+        </script>
+    </head>
+
+    <body>
+        <div>TODO write content</div>
+
+    </body>
+</html>

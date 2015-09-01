@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            "use strict";
+            //Obtner valores de los controles
+            alert("Hola Mundo!");
+            
+            function Sumar() {
+                //Manejo del DOM
+                //Acceso Directo a Nodos y sus atributos
+                //
+                var n1 = document.getElementById("txtN1").value;
+                var n2 = document.getElementById("txtN2").value;
+
+                var total= n1+n2;
+                document.getElementById("txtR").value=total;
+            }
+            //Eventos
+            
+            //document.getElementById("btnSumar2").onclick=Sumar;
+        </script>
+    </head>
+    
+    <body>
+        <div>TODO write content</div>
+        <input type="text" id="txtN1" >
+        
+        <input type="text" id="txtN2" >
+        
+        <input type="text" id="txtR" >
+        
+        <input type="button" id="btnSumar" onclick="Sumar()" >
+        
+        <input type="button" id="btnSumar2"  >
+    </body>
+</html>

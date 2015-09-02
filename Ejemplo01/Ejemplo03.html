@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            //se enviar una funcion que se ejecutarà despues que se halla cargado toda la página
+            /*
+             $(document).ready(Main);
+             
+             function Main(){
+             alert("incio la app");
+             }
+             */
+            /*
+             $(document).ready(function(){
+             alert("incio la app");
+             });
+             */
+
+            $(function () {
+                // Handler for .ready() called.
+                alert("incio la app");
+                /*
+                $("#BtnHola").click(btnHola_Click);
+                function btnHola_Click(){
+                    alert("Hize un Click");  
+                }
+                */
+                
+                $("#BtnHola").click(function(){
+                  alert("Hize un Click");  
+                });
+                /*
+                function ArmarNombre( Persona )
+                {
+                    Persona.Imprimir(Persona.Nombre+" "+Persona.Apellido);
+                }
+                
+                var Completo=ArmarNombre({
+                    Nombre:"Valentina",
+                    Apellido:"Gonzalez",
+                    Imprimir: function(text){
+                        alert(text);
+                    }
+                });*/
+        
+                function Procesar( Persona )
+                {
+                    if(Persona.Edad>=5) Persona.Primaria(Persona.ArmarNombre());
+                    else Persona.Jardin(Persona.ArmarNombre());
+
+                }
+                
+                Procesar({
+                    Nombre:"Valentina",
+                    Apellido:"Gonzalez",
+                    Edad:10,
+                    ArmarNombre: function(){
+                        return this.Nombre+" "+this.Apellido;
+                    },
+                    Primaria:function(texto){
+                        alert(texto + ": Se envia a primaria");
+                    },
+                    Jardin:function(texto){
+                        alert(texto + ": Se envia a jardin");
+                    }
+                });
+                
+                 Procesar({
+                    Nombre:"Valentina",
+                    Apellido:"Gonzalez",
+                    Edad:10,
+                    ArmarNombre: function(){
+                        return this.Nombre+" "+this.Apellido;
+                    },
+                    Primaria:function(texto){
+                        console.log(texto + ": Se envia a primaria");
+                    },
+                    Jardin:function(texto){
+                        console.log(texto + ": Se envia a jardin");
+                    }
+                });
+                
+                //alert(Completo);
+                
+            });
+        </script>
+    </head>
+    <body>
+        <div>TODO write content</div>
+
+        <button id="BtnHola">
+            Hola esto es un <b>botón</b>
+            <br>
+            <br>
+            Puedo poner saltos de línea en él!
+            <hr/>
+            Y otras cosas
+            <br>
+            <img src="http://www.desarrolloweb.com/images/logo_desarrollo_web.gif" width="261" height="35" alt="">
+        </button>
+        
+        <button id="BtnHola2"></button>
+    </body>
+</html>

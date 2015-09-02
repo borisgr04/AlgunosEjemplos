@@ -39,100 +39,7 @@ and open the template in the editor.
              enableHighAccuracy: true}
              );
              }*/
-            ﻿var PosicionGPS = (function () {
-                var Pos = {
-                    Longitud: null,
-                    Latitud: null
-                };
-                var iniciar;
-                function localizame() {
-                    if (navigator.geolocation) { /* Si el navegador tiene geolocalizacion */
-                        navigator.geolocation.getCurrentPosition(coordenadas, errores);
-                    } else {
-                        alert('Oops! Tu navegador no soporta geolocalización. Bájate Chrome, que es gratis!');
-                    }
-                }
-                function coordenadas(position) {
-                    Pos.Latitud = position.coords.latitude; /*Guardamos nuestra latitud*/
-                    Pos.Longitud = position.coords.longitude; /*Guardamos nuestra longitud*/
-                    Pos.Presicion = position.coords.accuracy;
-                    Pos.Velocidad = parseInt((position.coords.speed) * 3.6); //Esto porque?
-                    iniciar(Pos);
-                }
-                function errores(err) {
-                    /*Controlamos los posibles errores */
-                    if (err.code == 0) {
-                        alert("Oops! Algo ha salido mal");
-                    }
-                    if (err.code == 1) {
-                        alert("Oops! No has aceptado compartir tu posición");
-                    }
-                    if (err.code == 2) {
-                        alert("Oops! No se puede obtener la posición actual");
-                    }
-                    if (err.code == 3) {
-                        alert("Oops! Hemos superado el tiempo de espera");
-                    }
-                }
-                return {
-                    Obtener: function (init) {
-                        iniciar = init;
-                        localizame(init);
-                    }
-                };
-            }());
-            PosicionGPS.Obtener(function (Pos) {
-                cargarMapa(Pos);
-                alert("XX" + JSON.stringify(Pos));
-                alert("Ya se obtuvó las coordenadas");
-            });
-            function cargarMapa(Pos) {
-                var latitud = Pos.Latitud;
-                var longitud = Pos.Longitud;
 
-                var latlon = new google.maps.LatLng(latitud, longitud); /* Creamos un punto con nuestras coordenadas */
-                var myOptions = {
-                    zoom: 17,
-                    center: latlon, /* Definimos la posicion del mapa con el punto */
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                }; /*Configuramos una serie de opciones como el zoom del mapa y el tipo.*/
-                map = new google.maps.Map($("#map_canvas").get(0), myOptions); /*Creamos el mapa y lo situamos en su capa */
-
-                var coorMarcador = new google.maps.LatLng(latitud, longitud); //Un nuevo punto con nuestras coordenadas para el marcador (flecha) */
-
-                var marcador = new google.maps.Marker({
-                    /*Creamos un marcador*/
-                    position: coorMarcador, /*Lo situamos en nuestro punto */
-                    draggable: true,
-                    map: map, /* Lo vinculamos a nuestro mapa */
-                    title: "Dónde estoy?"
-                });
-                
-                map.addListener('click', function() {
-                    map.setZoom(8);
-                    map.setCenter(marker.getPosition());
-                });
-            }
-            //http://jafrancov.com/2010/08/bases-gmaps-api-v3/
-            function load() {
-                if (GBrowserIsCompatible()) {
-                    var map = new GMap2(document.getElementById("#map_canvas"));
-                    map.setCenter(new GLatLng(40, -4), 3);
-                    map.addControl(new GLargeMapControl());
-                    map.setMapType(G_NORMAL_MAP);
-
-                    var point = new GPoint(-4, 40);
-                    var marker = new GMarker(point);
-                    map.addOverlay(marker);
-
-                    GEvent.addListener(map, "click", function (overlay, point) {
-                        if (point) {
-                            marker.setPoint(point);
-                        }
-                    });
-                }
-            }
-            window.onload=load;
         </script>
     </head>
     <body>
@@ -154,6 +61,10 @@ and open the template in the editor.
                         <input type="text" id="txtApe" class="form-control">
                     </div>
                     <div class="form-group">
+                        <label for="txtTel">Telefono</label>
+                        <input type="text" id="txtTel" class="form-control">
+                    </div>
+                    <div class="form-group">
                         <label for="txtLtd">Latitud</label>
                         <input type="text" id="txtLtd" class="form-control">
                     </div>
@@ -168,6 +79,7 @@ and open the template in the editor.
                     </div>
 
                 </div>
+
                 <div class="col-md-6">
                     <div id='map_canvas' style='width:100%; height:400px;'></div>    
                 </div>
@@ -176,17 +88,118 @@ and open the template in the editor.
         </form>
         <script>
 
-            $(document).ready(function () {
+            $(function() {
+                alert("Enviar..");
+              
+                var PosicionGPS = (function () {
+                    var Pos = {
+                        Longitud: null,
+                        Latitud: null
+                    };
+                    var iniciar;
+                    var marcador;
 
-                function Inicializar() {
+                    function localizame() {
+                        if (navigator.geolocation) { 
+                            navigator.geolocation.getCurrentPosition(coordenadas, errores);
+                        } else {
+                            alert('Oops! Tu navegador no soporta geolocalización. Bájate Chrome, que es gratis!');
+                        }
+                    }
+                    function coordenadas(position) {
+                        Pos.Latitud = position.coords.latitude; 
+                        Pos.Longitud = position.coords.longitude; 
+                        Pos.Presicion = position.coords.accuracy;
+                        Pos.Velocidad = parseInt((position.coords.speed) * 3.6); 
+                        iniciar(Pos);
+                    }
+                    function errores(err) {
+                        if (err.code == 0) {
+                            alert("Oops! Algo ha salido mal");
+                        }
+                        if (err.code == 1) {
+                            alert("Oops! No has aceptado compartir tu posición");
+                        }
+                        if (err.code == 2) {
+                            alert("Oops! No se puede obtener la posición actual");
+                        }
+                        if (err.code == 3) {
+                            alert("Oops! Hemos superado el tiempo de espera");
+                        }
+                    }
+                    return {
+                        Obtener: function (init) {
+                            iniciar = init;
+                            localizame(init);
+                        }
+                    };
+                }());
+                PosicionGPS.Obtener(function (Pos) {
+                    cargarMapa(Pos);
+                    alert("XX" + JSON.stringify(Pos));
+                    alert("Ya se obtuvó las coordenadas");
 
+                    $("#txtLtd").val(Pos.Latitud);
+                    $("#txtLng").val(Pos.Longitud);
+                });
+                function cargarMapa(Pos) {
+                    var latitud = Pos.Latitud;
+                    var longitud = Pos.Longitud;
+                    // Creamos un punto con nuestras coordenadas 
+                    var latlon = new google.maps.LatLng(latitud, longitud); 
+                    var myOptions = {
+                        zoom: 17,
+                        center: latlon, // Definimos la posicion del mapa con el punto 
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    }; 
+                    //Configuramos una serie de opciones como el zoom del mapa y el tipo.
+                    map = new google.maps.Map($("#map_canvas").get(0), myOptions); //Creamos el mapa y lo situamos en su capa 
 
+                    var coorMarcador = new google.maps.LatLng(latitud, longitud); //Un nuevo punto con nuestras coordenadas para el marcador (flecha) 
+
+                    function openInfoWindow(marker) {
+                        var markerLatLng = marker.getPosition();
+                        infoWindow.setContent([
+                            markerLatLng.lat(), ',', markerLatLng.lng()
+                        ].join(''));
+                        infoWindow.open(map, marker);
+                    }
+
+                    var infoWindow = new google.maps.InfoWindow();
+
+                    map.addListener('click', function (event) {
+                        alert(marcador.getPosition().lat() + ":" + marcador.getPosition().lng());
+                        map.setCenter(marcador.getPosition());
+                    });
+
+                    marcador = new google.maps.Marker({
+                        //Creamos un marcador
+                        position: coorMarcador, //Lo situamos en nuestro punto 
+                        draggable: true,
+                        map: map, // Lo vinculamos a nuestro mapa 
+                        title: "Dónde estoy?"
+                    });
+
+                    google.maps.event.addListener(marcador, 'click', function () {
+                        openInfoWindow(marcador);
+                    });
+
+                    google.maps.event.addListener(
+                            marcador,
+                            'drag',
+                            function (event) {
+                                $("#txtLtd").val(this.position.lat());
+                                $("#txtLng").val(this.position.lng());
+                            });
+                    google.maps.event.addListener(marcador, 'dragend', function (event) {
+                        $("#txtLtd").val(this.position.lat());
+                        $("#txtLng").val(this.position.lng());
+                    });
                 }
+                
                 $("#BtnAdd").click(function () {
-                    var formData = $("#frmUser");
-                    var data = getFormData(formData);
-                    console.log(JSON.stringify(data));
-                    //enviarPOST();
+                    alert("Enviar..");
+                    enviarPOST();
                     //enviarGET();
                 });
                 //enviarGET();
@@ -220,8 +233,11 @@ and open the template in the editor.
                         id: $("#txtId").val(),
                         nombre: $("#txtNom").val(),
                         apellidos: $("#txtApe").val(),
-                        telefono: '3188780177'
+                        telefono: $("#txtTel").val(),
+                        latitud: $("#txtLtd").val(),
+                        longitud: $("#txtLng").val()
                     };
+                    alert(JSON.stringify(usuario));
                     $.ajax({
                         url: '/Ejemplo1/usuarios',
                         type: 'POST',

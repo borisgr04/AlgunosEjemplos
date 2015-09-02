@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Dinámico -->
+        <script>
+             //"use strict";
+             
+             //Ejemplo Hla Mundo
+            //alert("Hola Mundo");
+            //console.log("Hola Mundo");
+            
+           
+           //Imperativo (if,  for, while ...
+           // ; no es obligatorio
+           
+           
+           //Dinámico
+           //Tipo dinámico
+           /*
+           var x;
+           x=1;
+           console.log(x);
+           x="Hola";
+           console.log(x);
+           */
+           
+           //Objetual
+           /*
+           obj={};
+           obj.x = 10;
+           obj.y = 10;
+           console.log(obj['x']);
+           console.log(obj.x);
+           //se recorrren las propiedades de un objeto
+           for (var i in obj) {
+                console.log(i);
+           }
+           */
+          
+          //Evaluacion en Tiempo de Ejecuciòn
+          /*
+          eval("console.log('Hola Mundo')");
+          var x=1,y=2;
+          eval("alert(x+y)");
+          */ 
+           
+        </script>
+        <!-- Funcional -->
+        <script>
+            
+            //Programación funcional
+            //Funciones, son muy importantes.
+            /*
+            function Saludar(nombre)
+            {
+              console.log(" Hola "+ nombre);
+            }
+            Saludar("Upc");
+            */
+            //Anidar Funciones //Ambito de funciones
+            /*
+            function Saludar2(nombre, apellidos)
+            {
+                function ArmarNombre (nombre, apellidos){
+                    return nombre+" "+apellidos;
+                }
+                console.log(" Hola "+ ArmarNombre(nombre, apellidos));
+            }
+            Saludar2("Anya","Bolaño");
+            */
+            //funciones como parametros
+            
+            function Saludar3(fnEscribir)
+            {
+              fnEscribir(" Hola Mundo");
+            }
+            //Saludar3(alert);
+           
+            /*
+            //asingacion de funciones anonimas (lamda) a varibales
+            var funcionEscribir = function(texto){
+               console.log(texto);
+            }
+            Saludar3(funcionEscribir);
+            */
+            
+            
+            Saludar3(function(texto){
+                alert( texto );
+            });
+            
+            
+            /*
+            var displayClosure = function() {
+                var count = 0;
+                return function () {
+                    return ++count;
+                };
+            };
+            var r;
+            var inc = displayClosure();
+            r=inc(); // devuelve 1
+            console.log(r);
+            r=inc(); // devuelve 2
+            console.log(r);
+            r=inc(); // devuelve 3
+            console.log(r);
+            */
+        </script>
+    </head>
+    <body>
+        <div>TODO write content</div>
+    </body>
+</html>

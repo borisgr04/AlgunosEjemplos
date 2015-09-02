@@ -73,31 +73,35 @@ $app->get('/usuarios/:idusuario', function($usuarioID) use($db) {
 $app->post('/usuarios',function() use($db,$app) {
     // Para acceder a los datos recibidos del formulario
     /*
-    $r = \Slim\Slim::getInstance()->request(); //pedimos a Slim que nos mande el request
-    $p = json_decode($r->getBody()); //como el request esta en json lo decodificamos
-
-    
     echo json_encode("$p->id - $p->nombre - $p->apellidos - $p->telefono");
     */
-    $p = json_decode($app->request->getBody());
     // Los datos serán accesibles de esta forma:
+    $p = json_decode($app->request->getBody());
+    
+    
+    //echo json_encode("$p->latitud - $p->nombre - $p->apellidos - $p->telefono");
+    
     
     // Preparamos la consulta de insert.
-    $consulta=$db->prepare("insert into usuarios(id,nombre,apellidos,telefono) 
-					values (:id,:nombre,:apellidos,:telefono)");
+    $consulta=$db->prepare("insert into usuarios(id,nombre,apellidos,telefono, latitud, longitud) 
+					values (:id,:nombre,:apellidos,:telefono, :latitud, :longitud)");
  
+    
     $estado=$consulta->execute(
             array(
                 ':id'=> $p->id,
                 ':nombre'=> $p->nombre,
                 ':apellidos'=> $p->apellidos,
-                ':telefono'=> $p->telefono
+                ':telefono'=> $p->telefono,
+                ':latitud'=> $p->latitud,
+                ':longitud'=> $p->longitud,
                 )
             );
     if ($estado)
-        echo json_encode(array('estado'=>true,'mensaje'=>'Datos insertados correctamente.'));
+        echo json_encode(array('estado'=>true,'mensaje'=>'Datos insertados correctamente. '));
     else
         echo json_encode(array('estado'=>false,'mensaje'=>"Error al insertar datos en la tabla."));
+    
 });
 
 $app->run();        

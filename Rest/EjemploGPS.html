@@ -10,12 +10,13 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.8/css/dataTables.bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <script src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js"></script>
+        
+        <link rel="stylesheet" type="text/css" 
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.8/js/dataTables.bootstrap.min.js"></script>
-        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script> 
+        
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script> 
         <script >
             /*
              function watchCurrentPosition() {
@@ -43,6 +44,14 @@ and open the template in the editor.
         </script>
     </head>
     <body>
+        http://www.deif.org/blog/calcular-distancia-a-partir-de-datos-gps/
+        <br>
+        http://www.phonegapspain.com/topic/google-maps-y-calculo-de-distancia-entre-dos-puntos-geograficos/
+        <br>
+        http://stackoverflow.com/questions/6058904/removing-a-google-maps-circle-shape
+        <br>
+        Calculando distancia en gmaps <br>
+        http://www.funcion13.com/calculando-distancias-y-areas-con-google-maps-v3/
         <form id="frmUser">
 
             <div class="container">
@@ -88,9 +97,19 @@ and open the template in the editor.
         </form>
         <script>
 
-            $(function() {
-                alert("Enviar..");
-              
+            $(function () {
+                var circle; 
+                
+                var radioBusqueda=500;
+                var x1=new google.maps.LatLng(10.4786254,-73.24474120000002);
+                var x2=new google.maps.LatLng(10.471577980400356,-73.2632162556946);
+                var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
+                
+                console.log("Distancia:"+distancia);
+
+                
+                //http://tiku.io/questions/2974258/google-maps-draw-circle-around-radius-search
+
                 var PosicionGPS = (function () {
                     var Pos = {
                         Longitud: null,
@@ -100,17 +119,17 @@ and open the template in the editor.
                     var marcador;
 
                     function localizame() {
-                        if (navigator.geolocation) { 
+                        if (navigator.geolocation) {
                             navigator.geolocation.getCurrentPosition(coordenadas, errores);
                         } else {
                             alert('Oops! Tu navegador no soporta geolocalización. Bájate Chrome, que es gratis!');
                         }
                     }
                     function coordenadas(position) {
-                        Pos.Latitud = position.coords.latitude; 
-                        Pos.Longitud = position.coords.longitude; 
+                        Pos.Latitud = position.coords.latitude;
+                        Pos.Longitud = position.coords.longitude;
                         Pos.Presicion = position.coords.accuracy;
-                        Pos.Velocidad = parseInt((position.coords.speed) * 3.6); 
+                        Pos.Velocidad = parseInt((position.coords.speed) * 3.6);
                         iniciar(Pos);
                     }
                     function errores(err) {
@@ -136,8 +155,8 @@ and open the template in the editor.
                 }());
                 PosicionGPS.Obtener(function (Pos) {
                     cargarMapa(Pos);
-                    alert("XX" + JSON.stringify(Pos));
-                    alert("Ya se obtuvó las coordenadas");
+                    console.log("XX" + JSON.stringify(Pos));
+                    console.log("Ya se obtuvó las coordenadas");
 
                     $("#txtLtd").val(Pos.Latitud);
                     $("#txtLng").val(Pos.Longitud);
@@ -146,12 +165,12 @@ and open the template in the editor.
                     var latitud = Pos.Latitud;
                     var longitud = Pos.Longitud;
                     // Creamos un punto con nuestras coordenadas 
-                    var latlon = new google.maps.LatLng(latitud, longitud); 
+                    var latlon = new google.maps.LatLng(latitud, longitud);
                     var myOptions = {
-                        zoom: 17,
+                        zoom: 15,
                         center: latlon, // Definimos la posicion del mapa con el punto 
                         mapTypeId: google.maps.MapTypeId.ROADMAP
-                    }; 
+                    };
                     //Configuramos una serie de opciones como el zoom del mapa y el tipo.
                     map = new google.maps.Map($("#map_canvas").get(0), myOptions); //Creamos el mapa y lo situamos en su capa 
 
@@ -179,24 +198,50 @@ and open the template in the editor.
                         map: map, // Lo vinculamos a nuestro mapa 
                         title: "Dónde estoy?"
                     });
+                    
+                    DibCirculo(latitud, longitud);
 
                     google.maps.event.addListener(marcador, 'click', function () {
                         openInfoWindow(marcador);
                     });
 
-                    google.maps.event.addListener(
-                            marcador,
-                            'drag',
-                            function (event) {
+                    google.maps.event.addListener(marcador,'drag',function (event) {
                                 $("#txtLtd").val(this.position.lat());
                                 $("#txtLng").val(this.position.lng());
                             });
                     google.maps.event.addListener(marcador, 'dragend', function (event) {
                         $("#txtLtd").val(this.position.lat());
                         $("#txtLng").val(this.position.lng());
+                        DibCirculo(this.position.lat(),this.position.lng());
                     });
-                }
+
+                    function DibCirculo(Lat,Lng) {
+                        if(circle!=null){
+                            circle.setMap(null);
+                        }
+                        // Point where to search  
+                        var searchArea = new google.maps.LatLng(Lat,Lng);
+                        // Draw a circle around the radius
+                        circle = new google.maps.Circle({
+                            center: searchArea,
+                            radius: radioBusqueda, //convert miles to meters
+                            strokeColor: "#0000FF",
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: "#0000FF",
+                            fillOpacity: 0.4
+                        });
+                        circle.setMap(map);
+                        // Perform search over radius
+                        var request = {
+                            location: searchArea,
+                            radius: 1, //convert miles to meters
+                            keyword: "coffee"
+                        };
+                    }
                 
+                }
+
                 $("#BtnAdd").click(function () {
                     alert("Enviar..");
                     enviarPOST();

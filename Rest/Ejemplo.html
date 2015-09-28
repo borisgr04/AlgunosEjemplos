@@ -36,6 +36,12 @@ and open the template in the editor.
                             Apellidos
                         </th>
                         <th>
+                            Latitud
+                        </th>
+                        <th>
+                            Longitud
+                        </th>
+                        <th>
                             Acciòn
                         </th>
                     </tr>
@@ -85,8 +91,11 @@ and open the template in the editor.
                                 $("#bodyTable").append(
                                         "<tr><td>" + user.id +
                                         "</td><td> " + user.nombre +
-                                        "</td><td>" + user.apellidos + "</td>\n\
-                                         <td></td></tr>"
+                                        "</td><td>" + user.apellidos +
+                                        "</td><td>" + user.latitud + "</td>"+
+                                        "</td><td>" + user.longitud + "</td>"+
+                                         "<td></td></tr>"
+                                         
                                         );
                             });
                             //$('#table_id').dataTable();
@@ -96,7 +105,8 @@ and open the template in the editor.
                         }
                     });
                 }
-                function enviarPOST() {
+             
+        function enviarPOST() {
 
                     var user = {
                         id: $("#txtId").val(),

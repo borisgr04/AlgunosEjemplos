@@ -105,10 +105,13 @@ and open the template in the editor.
                 
                 var radioBusqueda=500;
                 
-                var x1=new google.maps.LatLng(10.4786254,-73.24474120000002);
-                var x2=new google.maps.LatLng(10.471577980400356,-73.2632162556946);
+                var x1=new google.maps.LatLng(10.4786254,-73.24474120000002);//punto actual
+                var x2=new google.maps.LatLng(10.471577980400356,-73.2632162556946);//cada punto
                 var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
-                
+                if(distancia<Radio)
+                {
+                    
+                }
                 console.log("Distancia:"+distancia);
 
                 
@@ -170,6 +173,7 @@ and open the template in the editor.
                     var longitud = Pos.Longitud;
                     // Creamos un punto con nuestras coordenadas 
                     var latlon = new google.maps.LatLng(latitud, longitud);
+                    
                     var myOptions = {
                         zoom: 15,
                         center: latlon, // Definimos la posicion del mapa con el punto 
